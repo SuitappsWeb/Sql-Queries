@@ -1,0 +1,16 @@
+SELECT TOP (1000) 
+    [AcID],
+    [slno],
+    [InvSeries],
+    [BillNo],
+    [Tdate],
+    [FCode],
+    [Debit],
+    [Credit],
+    [TCode],
+    [Type],
+    [Narration],
+    [Isdeleted]
+FROM [SuitApps_KairaliFoods_Soft].[dbo].[AcTransaction]
+WHERE (TCode = 7 OR FCode = 7)
+  AND (Debit > 1 OR Credit > 1);
