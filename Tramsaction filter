@@ -13,4 +13,7 @@ SELECT TOP (1000)
     [Isdeleted]
 FROM [SuitApps_KairaliFoods_Soft].[dbo].[AcTransaction]
 WHERE (TCode = 7 OR FCode = 7)
-  AND (Debit > 1 OR Credit > 1);
+  AND (Debit > 1 OR Credit > 1
+  or Debit <-1 or credit <-1) 
+
+  order by [Tdate];
