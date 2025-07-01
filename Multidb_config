@@ -1,0 +1,123 @@
+// config/mssql.js
+
+const baseConfig = {
+    user: 'sa',
+    password: 'micro@admin123',
+    port: 1433,
+    server: '103.86.177.136',
+    options: {
+        encrypt: true,
+        enableArithAbort: true,
+        trustServerCertificate: true,
+    },
+    pool: {
+        max: 10,
+        min: 0,
+        idleTimeoutMillis: 100000,
+    },
+    requestTimeout: 100000,
+    connectionTimeout: 15000,
+};
+
+// Declare both DBs
+const softDbConfig = {
+    ...baseConfig,
+    database: 'SuitApps_KairaliFoods_Soft'
+};
+
+const appDbName = 'SuitApps_KairaliFoods_App'; // Just the name, used in SP
+
+module.exports = {
+    softDbConfig,
+    appDbName
+};
+
+
+
+
+
+
+
+
+const express = require('express');
+const router = express.Router();
+const sql = require('mssql');
+const { softDbConfig, appDbName } = require('../../config/mssql');
+
+router.get('/routeCustomer', async (req, res) => {
+    const { CompanyID } = req.query;
+
+    const daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const currentDay = daysOfWeek[new Date().getDay()];
+
+    try {
+        await sql.connect(softDbConfig); // Connect to Soft DB
+
+        const request = new sql.Request();
+        request.input('CompanyID', sql.Int, CompanyID);
+        request.input('DayOfWeek', sql.NVarChar(20), currentDay);
+        request.input('AppDBName', sql.NVarChar(100), appDbName); // Use from config
+
+        const result = await request.execute('webGetActivecustomerdaywise');
+        res.json(result.recordset);
+    } catch (err) {
+        console.error('SQL error:', err);
+        res.status(500).send('Server error');
+    }
+});
+
+module.exports = router;
+
+
+
+INNER JOIN [' + @AppDBName + '].[dbo].[EmpRoute] E
+
+
+
+ALTER PROCEDURE [dbo].[webGetActivecustomerdaywise]
+    @CompanyID INT,
+    @DayOfWeek NVARCHAR(20), -- Pass the day of the week as a parameter
+    @AppDBName NVARCHAR(100) -- Application database name
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Dynamic filtering for days of the week
+    DECLARE @DayFilter NVARCHAR(MAX);
+    IF @DayOfWeek = 'Monday'
+        SET @DayFilter = 'mon = 1';
+    ELSE IF @DayOfWeek = 'Tuesday'
+        SET @DayFilter = 'tue = 1';
+    ELSE IF @DayOfWeek = 'Wednesday'
+        SET @DayFilter = 'wed = 1';
+    ELSE IF @DayOfWeek = 'Thursday'
+        SET @DayFilter = 'thur = 1';
+    ELSE IF @DayOfWeek = 'Friday'
+        SET @DayFilter = 'friday = 1';
+    ELSE IF @DayOfWeek = 'Saturday'
+        SET @DayFilter = 'sat = 1';
+    ELSE IF @DayOfWeek = 'Sunday'
+        SET @DayFilter = 'sun = 1';
+
+    -- Build the SQL string dynamically with injected @AppDBName
+    DECLARE @SQL NVARCHAR(MAX);
+
+    SET @SQL = '
+    SELECT 
+        COUNT(DISTINCT A.AccountID) AS AccountCount
+    FROM 
+        [dbo].[Accout] A
+    INNER JOIN 
+        [' + @AppDBName + '].[dbo].[EmpRoute] E
+        ON A.RootID = E.RootID
+    WHERE 
+        A.IsDeleted = 0 AND E.IsDeleted = 0
+        AND A.CompanyID = @CompanyID
+        AND E.CompanyID = @CompanyID
+        AND ' + @DayFilter;
+
+    -- Execute the dynamic SQL
+    EXEC sp_executesql @SQL, N'@CompanyID INT', @CompanyID;
+END;
+
+
