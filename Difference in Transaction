@@ -1,0 +1,15 @@
+SELECT
+    CAST(Tdate AS DATE) AS TransactionDate,
+    SUM(Debit) AS TotalDebit,
+    SUM(Credit) AS TotalCredit,
+    SUM(Debit) - SUM(Credit) AS Balance
+FROM
+    [SuitApps_KairaliFoods_Soft].[dbo].[AcTransaction]
+WHERE
+    Isdeleted = 0
+    AND Tdate >= '2025-02-01'
+    AND Tdate < CAST(GETDATE() + 1 AS DATE)  -- up to today
+GROUP BY
+    CAST(Tdate AS DATE)
+ORDER BY
+    CAST(Tdate AS DATE);
