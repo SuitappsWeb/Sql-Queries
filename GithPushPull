@@ -99,3 +99,38 @@ Click ↕ Sync Changes — this pulls last night’s work from GitHub.
 Make your edits.
 
 Commit & Sync Changes before leaving again.
+
+
+First-time setup at home
+
+Copy your GitHub repo link
+
+Go to the repo on GitHub.
+
+Click the green Code button.
+
+Select HTTPS (unless you use SSH) and copy the link.
+Example:
+
+https://github.com/your-username/your-repo.git
+
+
+Open VS Code → Clone the repo
+
+In VS Code, press Ctrl + Shift + P (Windows) or Cmd + Shift + P (Mac) to open the Command Palette.
+
+Type Git: Clone → select it.
+
+Paste the GitHub URL → press Enter.
+
+Choose a folder location
+
+Pick where you want the code stored locally (e.g., Documents/Projects).
+
+Open the project
+
+VS Code will ask if you want to Open the cloned repo — click Yes.
+
+Install dependencies (if needed)
+
+If it’s a Node, Python, or other project that needs packages, install them now (e.g., npm install, pip install -r requirements.txt, etc.).
