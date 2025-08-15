@@ -1,0 +1,101 @@
+0) Prerequisites (one-time)
+
+Install Git: [git-scm.com] → install, keep defaults.
+
+Install VS Code: [code.visualstudio.com].
+
+Tell Git who you are (once):
+
+Open VS Code → Terminal → New Terminal and run:
+
+git config --global user.name "Your Name"
+git config --global user.email "your@email.com"
+
+
+Sign in to GitHub in VS Code (easy auth):
+
+In VS Code, click the Accounts icon (top-right) → Sign in to GitHub → authorize in browser.
+
+Optional (advanced): set up SSH keys and use the SSH remote. If you skip this, HTTPS with Git Credential Manager works fine.
+
+1) Push a brand-new local project to GitHub
+
+Goal: You have a folder on your computer that’s not yet on GitHub.
+
+Open the folder in VS Code (File → Open Folder).
+
+Initialize Git:
+
+Click the Source Control icon (branch symbol) on the left.
+
+Click Initialize Repository.
+
+Create a .gitignore (optional but recommended):
+
+Add a file named .gitignore (e.g., for Node: node_modules/, for Python: __pycache__/).
+
+Stage & commit your first snapshot:
+
+In Source Control, hover each changed file → + (stage), or click + next to Changes to stage all.
+
+Enter a message like Initial commit → press Ctrl/Cmd + Enter (or click the checkmark) to Commit.
+
+Publish to GitHub:
+
+In the Source Control view, click Publish Branch (or Publish to GitHub).
+
+Choose Private or Public. VS Code creates the repo on GitHub and sets the remote.
+
+Verify: You’ll see a “Synchronize Changes” ↕ button in the bottom-left. Click it if prompted to push.
+
+You’re now live on GitHub 🎉
+
+
+
+Daily Flow in VS Code
+1) Before leaving the office
+
+Open Source Control panel
+
+Left sidebar → click the branch icon (Source Control).
+
+Stage all your changes
+
+Click the + button next to Changes (or hover each file and click +).
+
+Commit
+
+Type a message like Work in progress in the text box above the file list.
+
+Press Ctrl + Enter (Windows) or Cmd + Enter (Mac)
+(or click the ✓ checkmark at the top).
+
+Push to GitHub
+
+At the bottom-left, click ↕ Sync Changes.
+
+VS Code will push your commit to GitHub so the home computer can pull it.
+
+2) At home (before starting work)
+
+Pull the latest changes
+
+Bottom-left → click ↕ Sync Changes (this does a pull first, then push if needed).
+
+If no changes to push yet, it will just pull.
+
+Do your edits in VS Code.
+
+Commit & push when done for the night
+
+Stage → Commit → Sync Changes (same steps as office).
+
+3) Next day back at the office
+
+Sync before starting
+
+Click ↕ Sync Changes — this pulls last night’s work from GitHub.
+
+Make your edits.
+
+Commit & Sync Changes before leaving again.
